@@ -1,0 +1,91 @@
+digit-predictor/
+├─ src/
+│  ├─ main.jsx
+│  ├─ App.jsx
+│  └─ config.js
+├─ index.html
+├─ vite.config.js
+└─ .env
+import React, { useEffect, useState } from 'react';
+import { API_TOKEN, API_ID } from './config';
+
+function App() {
+  const [status, setStatus] = useState('Initializing...');
+  const [data, setData] = useState(null);
+
+  // Example: fetch placeholder API data
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        setStatus('Fetching data from API...');
+        
+        // Placeholder fetch logic (replace with your real Deriv API calls)
+        const response = await fetch('https://example.com/api/data', {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${API_TOKEN}`,
+            'X-APP-ID': API_ID
+          }
+        });
+        
+        const result = await response.json();
+        setData(result);
+        setStatus('Data loaded successfully!');
+      } catch (err) {
+        console.error(err);
+        setStatus('Failed to fetch API data.');
+      }
+    }
+
+    fetchData();
+  }, []);
+
+  return (
+    <div style={{ textAlign: 'center', marginTop: '50px', fontFamily: 'Arial, sans-serif' }}>
+      <h1>Digit Predictor</h1>
+      <p>Status: {status}</p>
+
+      {data ? (
+        <pre style={{ textAlign: 'left', display: 'inline-block', marginTop: '20px' }}>
+          {JSON.stringify(data, null, 2)}
+        </pre>
+      ) : (
+        <p>Waiting for data...</p>
+      )}
+    </div>
+  );
+}
+
+export default App;
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Digit Predictor</title>
+  </head>
+  <body>
+    <div id="root"></div>
+
+    <!-- Vite will resolve this path correctly -->
+    <script type="module" src="./src/main.jsx"></script>
+  </body>
+</html>
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+
+export default defineConfig({
+  plugins: [react()],
+  resolve: {
+    alias: {
+      '@': '/src'  // allows you to import like "@/components/MyComponent"
+    }
+  },
+  build: {
+    rollupOptions: {
+      // keep external modules if needed (not required for main.jsx)
+    }
+  }
+});
+VITE_API_TOKEN=KBZ28EV3NgJI2sX
+VITE_API_ID=100454
